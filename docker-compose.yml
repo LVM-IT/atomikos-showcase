@@ -1,0 +1,37 @@
+version: '2'
+services:
+  db2:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: local/db2
+    network_mode: "bridge"
+
+    environment:
+      - LICENSE=accept
+      - DB2INST1_PASSWORD=db2inst1-pwd
+
+    command: db2start
+    volumes:
+      - ./initdb.d:/initdb.d
+    ports:
+      - 50000:50000
+
+  postgres:
+   image: postgres
+   network_mode: "bridge"
+   environment:
+    - POSTGRES_DB=test
+    - POSTGRES_USER=test
+    - POSTGRES_PASSWORD=test
+    - POSTGRES_INITDB_ARGS=''
+   ports:
+    - 5432:5432
+
+   command: --max_prepared_transactions=110
+   
+   volumes:
+    - ./initdb-postgres.d:/docker-entrypoint-initdb.d
+
+#   tmpfs:
+#    - "/var/lib/postgresql/data:rw"

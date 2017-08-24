@@ -1,0 +1,94 @@
+#!/bin/bash
+set -e
+#
+#   Initialize DB2 instance in a Docker container
+#
+# # Authors:
+#   * Leo (Zhong Yu) Wu       <leow@ca.ibm.com>
+#
+# Copyright 2015, IBM Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if [ -z "$DB2INST1_PASSWORD" ]; then
+  echo ""
+  echo >&2 'error: DB2INST1_PASSWORD not set'
+  echo >&2 'Did you forget to add -e DB2INST1_PASSWORD=... ?'
+  exit 1
+else
+  echo -e "$DB2INST1_PASSWORD\n$DB2INST1_PASSWORD" | passwd db2inst1
+fi
+
+if [ -z "$LICENSE" ];then
+   echo ""
+   echo >&2 'error: LICENSE not set'
+   echo >&2 "Did you forget to add '-e LICENSE=accept' ?"
+   exit 1
+fi
+
+if [ "${LICENSE}" != "accept" ];then
+   echo ""
+   echo >&2 "error: LICENSE not set to 'accept'"
+   echo >&2 "Please set '-e LICENSE=accept' to accept License before use the DB2 software contained in this image."
+   exit 1
+fi
+
+#--- extension
+
+dbcmd='
+#commands to initialize the db2 master engine
+echo "Starting db"
+su - db2inst1 -c "db2start"
+if ! su - db2inst1 -c "db2 connect to db2inst1 2>&1 > /dev/null"; then 
+    echo "Creating db db2inst1"
+    su - db2inst1 -c "db2 create database db2inst1"
+fi
+su - db2inst1 -c "db2set DB2COMM=TCPIP"
+
+'
+
+if [ "$DATABASE" ]; then
+
+    dbcmd+='
+    if ! su - db2inst1 -c "db2 connect to $DATABASE 2>&1 > /dev/null"; then 
+        echo "Creating db $DATABASE"
+        su - db2inst1 -c "db2 create database $DATABASE"
+    fi
+    '
+
+fi
+
+#--- end
+
+if [[ $1 = "db2start" ]]; then
+  #su - db2inst1 -c "db2start"
+  echo "Running setup"
+  eval "$dbcmd"
+  echo "Setup done"
+  su - db2inst1 -c "db2 list db directory"
+
+  for f in /initdb.d/*; do
+    case "$f" in
+            *.sh)     echo "$0: running $f"; su db2inst1 < $f ;;
+            *.sql)    echo "$0: running $f"; su - db2inst1 -c "db2 -tvsf $f"; echo ;;
+            *)        echo "$0: ignoring $f" ;;
+    esac
+    echo
+  done
+
+
+  #nohup /usr/sbin/sshd -D 2>&1 > /dev/null &
+  while true; do sleep 1000; done
+else
+  exec "$1"
+fi
