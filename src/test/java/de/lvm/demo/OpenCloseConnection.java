@@ -16,6 +16,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Exception when using a connection for open-close
+ */
 public class OpenCloseConnection
 {
 
@@ -94,8 +97,12 @@ public class OpenCloseConnection
     {
         
         if(ds == null){
+            //untransacted
 //        ds = PgDatabaseTools.buildDataSource();
-            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+            //transacted without test query
+//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+            //transacted with test query
+            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
         }
         
         Connection conn = null;
