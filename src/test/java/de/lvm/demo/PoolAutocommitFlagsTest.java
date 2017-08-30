@@ -75,7 +75,7 @@ public class PoolAutocommitFlagsTest
         if (ds == null)
         {
             //transacted without test query
-            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithoutTestQuery();
 
             ((AtomikosDataSourceBean) ds).setMaxPoolSize(1);
         }

@@ -81,7 +81,7 @@ public class IsolationLevelTest
             //transacted without test query
 //            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
             //transacted with test query
-            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
 
             ((AtomikosDataSourceBean) ds).setDefaultIsolationLevel(8);
         }

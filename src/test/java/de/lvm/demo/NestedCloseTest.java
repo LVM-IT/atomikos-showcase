@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Closing statement after connection
+ * This Test *Only* fails with DB/2!!
  */
 public class NestedCloseTest
 {
@@ -75,7 +76,7 @@ public class NestedCloseTest
         if (ds == null)
         {
             //transacted without test query
-            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
             //transacted with test query
 //            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
         }

@@ -86,7 +86,7 @@ public class OpenCloseConnectionTest
             //transacted without test query
 //            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
             //transacted with test query
-            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();

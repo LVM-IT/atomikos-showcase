@@ -11,6 +11,8 @@ To run the tests start the docker environment using:
 To stop the docker environment use
 `docker-compose down`
 
+Perhaps these commands could only run with Super User credentials so that a `sudo` is to prepend.
+
 The initial structures are created from SQL scripts in the directories initdb-postgres.d for postgresql and init.db for db2.
 
 
