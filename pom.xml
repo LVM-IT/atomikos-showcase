@@ -106,8 +106,7 @@
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks> <!-- fresh jvm for each test -->
-                    <systemPropertyVariables>
-                    </systemPropertyVariables>
+                    <systemPropertyVariables></systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
