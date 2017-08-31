@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * Closing statement after connection
  * This Test *Only* fails with DB/2!!
  */
-public class NestedCloseTest
+public class PrepareStatementGetConnectionTest
 {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -35,20 +35,6 @@ public class NestedCloseTest
         logger.info("open Connection ...");
         Connection conn = open();
 
-        logger.info("conn {}", conn);
-        try (PreparedStatement ps = conn.prepareStatement("insert into TEST.daten (id, name, count) VALUES (?,?,?)"))
-        {
-            ps.setString(1, uuid);
-            ps.setString(2, "example");
-            ps.setInt(3, 1234);
-
-            logger.info("writing with id: {}", uuid);
-            ps.execute();
-        }
-        conn.close();
-
-        logger.info("open Connection ...");
-        conn = open();
         try (PreparedStatement ps = conn.prepareStatement("select count from TEST.daten where name like ?"))
         {
             ps.setString(1, "example%");
@@ -78,7 +64,7 @@ public class NestedCloseTest
             //transacted without test query
             ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
             //transacted with test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+//            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();

@@ -84,9 +84,9 @@ public class OpenCloseConnectionTest
             //untransacted
 //        ds = PgDatabaseTools.buildDataSource();
             //transacted without test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithoutTestQuery();
             //transacted with test query
-            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithTestQuery();
+//            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();

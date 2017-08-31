@@ -41,7 +41,7 @@ public class IsolationLevelTest
         //works
         doIt(utm, uuid);
 
-        //breaks when setting isolation level (again) on postgresql
+        //breaks when setting isolation level (again) 
         assertThat(doIt(utm, uuid), is(true));
 
     }
@@ -79,9 +79,9 @@ public class IsolationLevelTest
         if (ds == null)
         {
             //transacted without test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithoutTestQuery();
+//            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithoutTestQuery();
             //transacted with test query
-            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
+            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithTestQuery();
 
             ((AtomikosDataSourceBean) ds).setDefaultIsolationLevel(8);
         }

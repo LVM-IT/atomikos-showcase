@@ -28,6 +28,7 @@
 
     <dependencies>
         
+        
            <!-- jta and atomikos -->
         <dependency>
             <groupId>javax.transaction</groupId>
