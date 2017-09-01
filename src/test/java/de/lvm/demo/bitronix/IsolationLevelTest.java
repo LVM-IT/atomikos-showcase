@@ -1,20 +1,21 @@
-package de.lvm.demo;
+package de.lvm.demo.bitronix;
 
+import bitronix.tm.BitronixTransactionManager;
+import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+import de.lvm.demo.AtomikosTools;
+import de.lvm.demo.BitronixTools;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import javax.transaction.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
-import javax.sql.DataSource;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,22 +35,23 @@ public class IsolationLevelTest
     public void show() throws Exception
     {
 
-        String uuid = UUID.randomUUID().toString();
 
-        UserTransactionManager utm = new UserTransactionManager();
+        BitronixTransactionManager btm = new BitronixTransactionManager();
 
         //works
-        doIt(utm, uuid);
+        doIt(btm);
 
         //breaks when setting isolation level (again) 
-        assertThat(doIt(utm, uuid), is(true));
+        assertThat(doIt(btm), is(true));
 
     }
 
-    protected boolean doIt(UserTransactionManager utm, String uuid) throws RollbackException, HeuristicMixedException, SQLException, SecurityException, NotSupportedException, HeuristicRollbackException, SystemException, IllegalStateException
+    protected boolean doIt(BitronixTransactionManager btm) throws RollbackException, HeuristicMixedException, SQLException, SecurityException, NotSupportedException, HeuristicRollbackException, SystemException, IllegalStateException
     {
-        utm.init();
-        utm.begin();
+
+        String uuid = UUID.randomUUID().toString();
+
+        btm.begin();
 
         logger.info("open Connection ...");
         Connection conn = open();
@@ -67,8 +69,8 @@ public class IsolationLevelTest
         logger.info("close Connection ...");
         conn.close();
 
-        utm.commit();
-        utm.close();
+        btm.commit();
+        //btm.shutdown();
 
         return true;
     }
@@ -81,9 +83,9 @@ public class IsolationLevelTest
             //transacted without test query
 //            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithoutTestQuery();
             //transacted with test query
-            ds = AtomikosTools.buildAtomikosPGDataSourceBeanWithTestQuery();
+            ds = BitronixTools.buildBitronixPGDataSourceBeanWithTestQuery();
 
-            ((AtomikosDataSourceBean) ds).setDefaultIsolationLevel(8);
+            ((PoolingDataSource) ds).setIsolationLevel("SERIALIZABLE");
         }
 
         return ds.getConnection();

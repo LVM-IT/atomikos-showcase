@@ -1,20 +1,19 @@
-package de.lvm.demo;
+package de.lvm.demo.bitronix;
 
+import bitronix.tm.BitronixTransactionManager;
+import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.UUID;
-import javax.sql.DataSource;
-
+import de.lvm.demo.AtomikosTools;
+import de.lvm.demo.BitronixTools;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Connections taken from the pool keep auto-commit setting as returned to pool
@@ -28,13 +27,13 @@ public class PoolAutocommitFlagsTest {
     @Test
     public void show() throws Exception {
 
-        UserTransactionManager utm = new UserTransactionManager();
-        utm.init();
-        utm.begin();
+        BitronixTransactionManager btm = new BitronixTransactionManager();
+
+        btm.begin();
         
         //check code
         logger.info("open Connection ...");
-        Connection conn = open(true);
+        Connection conn = open(false);
         conn.setAutoCommit(false);
 
         logger.info("conn {}", conn);
@@ -61,8 +60,8 @@ public class PoolAutocommitFlagsTest {
         logger.info("Auto-commit is '{}'", conn.getAutoCommit());
 
         conn.close();
-        utm.commit();
-        utm.close();
+        btm.commit();
+        btm.shutdown();
 
     }
 
@@ -70,11 +69,11 @@ public class PoolAutocommitFlagsTest {
         if (ds == null) {
             //transacted without test query
             if (tq)
-                ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
+                ds = BitronixTools.buildBitronixDB2DataSourceBeanWithTestQuery();
             else
-                ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
+                ds = BitronixTools.buildBitronixDB2DataSourceBeanWithoutTestQuery();
 
-            ((AtomikosDataSourceBean) ds).setMaxPoolSize(1);
+            ((PoolingDataSource) ds).setMaxPoolSize(1);
         }
 
         return ds.getConnection();

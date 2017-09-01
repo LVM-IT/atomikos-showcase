@@ -1,22 +1,23 @@
-package de.lvm.demo;
+package de.lvm.demo.atomikos;
 
 import com.atomikos.icatch.jta.UserTransactionManager;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import javax.sql.DataSource;
+
+import de.lvm.demo.AtomikosTools;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Example when retrieving metadata from a connection
- * This Test *Only* fails with DB/2 on System Z!!!
+ * Closing statement after connection
+ * This Test *Only* fails with DB/2!!
  */
-public class RetrieveMetadataTest
+public class PrepareStatementGetConnectionTest
 {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,40 +28,15 @@ public class RetrieveMetadataTest
     public void show() throws Exception
     {
 
-        String uuid = UUID.randomUUID().toString();
-
         UserTransactionManager utm = new UserTransactionManager();
         utm.init();
+
+        String uuid = UUID.randomUUID().toString();
+
         utm.begin();
         logger.info("open Connection ...");
         Connection conn = open();
 
-        //XX
-        logger.info("get metadata ...");
-        DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet catalogs = metaData.getCatalogs();
-        catalogs.close();
-
-        //XX
-        DatabaseMetaData metaData_ = conn.getMetaData();
-        ResultSet catalogs_ = metaData_.getCatalogs();
-        catalogs_.close();
-
-        logger.info("conn {}", conn);
-        try (PreparedStatement ps = conn.prepareStatement("insert into TEST.daten (id, name, count) VALUES (?,?,?)"))
-        {
-            ps.setString(1, uuid);
-            ps.setString(2, "example");
-            ps.setInt(3, 1234);
-
-            logger.info("writing with id: {}", uuid);
-            ps.execute();
-        }
-        logger.info("close Connection ...");
-        conn.close();
-
-        logger.info("open Connection ...");
-        conn = open();
         try (PreparedStatement ps = conn.prepareStatement("select count from TEST.daten where name like ?"))
         {
             ps.setString(1, "example%");
@@ -71,11 +47,13 @@ public class RetrieveMetadataTest
                     int count = resultSet.getInt("count");
                     logger.info("Count: " + count);
                 }
+                logger.info("close connection ...");
+                ps.getConnection().close();
             }
         }
 
         utm.commit();
-        conn.close();
+        //  conn.close();
         utm.close();
 
     }
@@ -88,7 +66,7 @@ public class RetrieveMetadataTest
             //transacted without test query
             ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
             //transacted with test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+//            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();

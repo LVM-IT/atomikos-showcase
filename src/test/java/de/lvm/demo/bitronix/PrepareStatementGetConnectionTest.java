@@ -1,15 +1,19 @@
-package de.lvm.demo;
+package de.lvm.demo.bitronix;
 
+import bitronix.tm.BitronixTransactionManager;
 import com.atomikos.icatch.jta.UserTransactionManager;
+import de.lvm.demo.AtomikosTools;
+import de.lvm.demo.BitronixTools;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import javax.sql.DataSource;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Closing statement after connection
@@ -26,12 +30,12 @@ public class PrepareStatementGetConnectionTest
     public void show() throws Exception
     {
 
-        UserTransactionManager utm = new UserTransactionManager();
-        utm.init();
+        BitronixTransactionManager btm = new BitronixTransactionManager();
+
 
         String uuid = UUID.randomUUID().toString();
 
-        utm.begin();
+        btm.begin();
         logger.info("open Connection ...");
         Connection conn = open();
 
@@ -50,9 +54,9 @@ public class PrepareStatementGetConnectionTest
             }
         }
 
-        utm.commit();
+        btm.commit();
         //  conn.close();
-        utm.close();
+        btm.shutdown();
 
     }
 
@@ -62,7 +66,7 @@ public class PrepareStatementGetConnectionTest
         if (ds == null)
         {
             //transacted without test query
-            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
+            ds = BitronixTools.buildBitronixDB2DataSourceBeanWithoutTestQuery();
             //transacted with test query
 //            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
         }
