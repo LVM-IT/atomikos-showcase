@@ -43,11 +43,6 @@ public class RetrieveMetadataTest
         ResultSet catalogs = metaData.getCatalogs();
         catalogs.close();
 
-        //XX
-        DatabaseMetaData metaData_ = conn.getMetaData();
-        ResultSet catalogs_ = metaData_.getCatalogs();
-        catalogs_.close();
-
         logger.info("conn {}", conn);
         try (PreparedStatement ps = conn.prepareStatement("select 1 from sysibm.sysdummy1"))
         {
