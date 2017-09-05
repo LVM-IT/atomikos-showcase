@@ -38,6 +38,9 @@ public class AtomikosTools
 
     }
 
+    /**
+     * Works with Docker / locally
+     */
     public static AtomikosDataSourceBean buildAtomikosDB2DataSourceBeanWithoutTestQuery() {
         AtomikosDataSourceBean dsBean = new AtomikosDataSourceBean();
         DB2XADataSource db2XADataSource = new DB2XADataSource();
@@ -68,6 +71,9 @@ public class AtomikosTools
 
     }
 
+    /**
+     * Note: Works only in integration test environment!
+     */
     public static AtomikosDataSourceBean buildAtomikosDB2HostDataSourceBeanWithoutTestQuery() {
         AtomikosDataSourceBean dsBean = new AtomikosDataSourceBean();
         DB2XADataSource db2XADataSource = new DB2XADataSource();
@@ -89,6 +95,9 @@ public class AtomikosTools
 
     }
 
+    /**
+     * Note: Works only in integration test environment!
+     */
     public static AtomikosDataSourceBean buildAtomikosDB2HostDataSourceBeanWithTestQuery() {
 
         AtomikosDataSourceBean dsBean = buildAtomikosDB2DataSourceBeanWithoutTestQuery();

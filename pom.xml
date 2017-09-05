@@ -27,13 +27,8 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.codehaus.btm</groupId>
-            <artifactId>btm</artifactId>
-            <version>2.1.4</version>
-        </dependency>
         
-           <!-- jta and atomikos -->
+        <!-- jta and atomikos -->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
@@ -55,7 +50,36 @@
             <artifactId>transactions-api</artifactId>
             <version>${atomikos.version}</version>
         </dependency>
+        
+        <!-- bitronix -->
+        <dependency>
+            <groupId>org.codehaus.btm</groupId>
+            <artifactId>btm</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        
+        <!-- jms / activemq -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.15.0</version>
+        </dependency>
 
+
+
+        <!-- jdbc drivers -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>db2jcc</artifactId>
+            <version>4.19.66</version>
+        </dependency>
+        
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -80,18 +104,6 @@
         </dependency>
 
         
-        <!-- jdbc drivers -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ibm.db2</groupId>
-            <artifactId>db2jcc</artifactId>
-            <version>4.19.66</version>
-        </dependency>
 
         <!-- test -->
         <dependency>

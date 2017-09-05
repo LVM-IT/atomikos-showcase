@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
 import javax.sql.DataSource;
 
 import de.lvm.demo.AtomikosTools;
@@ -30,8 +29,6 @@ public class PrepareStatementGetConnectionTest
 
         UserTransactionManager utm = new UserTransactionManager();
         utm.init();
-
-        String uuid = UUID.randomUUID().toString();
 
         utm.begin();
         logger.info("open Connection ...");
