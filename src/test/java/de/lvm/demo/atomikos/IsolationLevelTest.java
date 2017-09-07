@@ -35,9 +35,6 @@ public class IsolationLevelTest
     @Test
     public void show() throws Exception
     {
-
-
-
         UserTransactionManager utm = new UserTransactionManager();
 
         //works
@@ -45,7 +42,6 @@ public class IsolationLevelTest
 
         //breaks when setting isolation level (again) 
         assertThat(doIt(utm), is(true));
-
     }
 
     protected boolean doIt(UserTransactionManager utm) throws RollbackException, HeuristicMixedException, SQLException, SecurityException, NotSupportedException, HeuristicRollbackException, SystemException, IllegalStateException
