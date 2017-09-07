@@ -15,7 +15,6 @@ import org.junit.Test;
  */
 public class SimpleJmsTest
 {
-
     @Test
     public void sendUntransactedMessage() throws Exception
     {
@@ -39,7 +38,7 @@ public class SimpleJmsTest
         session.close();
         connection.close();
     }
-    
+
     @Test
     public void sendTransactedMessage() throws Exception
     {
@@ -60,10 +59,53 @@ public class SimpleJmsTest
 
         producer.send(message);
         producer.close();
-        
+
         session.commit();
         session.close();
-        
+
+        connection.close();
+    }
+
+    @Test
+    public void sendTransactedMessageWithSessionReopen() throws Exception
+    {
+        // connect to local (docker) activemq
+        final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616?jms.useAsyncSend=false");
+
+        final Connection connection = connectionFactory.createConnection();
+        connection.start();
+
+        Session session = connection.createSession(true, Session.SESSION_TRANSACTED);
+
+        Destination destination = session.createQueue("TEST.SHOWCASE");
+        MessageProducer producer = session.createProducer(destination);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+
+        String text = "Sample message from thread: " + Thread.currentThread().getName() + " : " + new Date() + " (transacted)";
+        TextMessage message = session.createTextMessage(text);
+
+        producer.send(message);
+        producer.close();
+
+        session.commit();
+        session.close();
+
+        //second
+        session = connection.createSession(true, Session.SESSION_TRANSACTED);
+
+        destination = session.createQueue("TEST.SHOWCASE");
+        producer = session.createProducer(destination);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+
+        text = "Sample message from thread: " + Thread.currentThread().getName() + " : " + new Date() + " (transacted, 2nd)";
+        message = session.createTextMessage(text);
+
+        producer.send(message);
+        producer.close();
+
+        session.commit();
+        session.close();
+
         connection.close();
     }
 }

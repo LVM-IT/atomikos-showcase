@@ -18,10 +18,10 @@ import org.junit.Test;
  */
 public class SimpleAtomikosJmsTest
 {
-
     @Test
-    public void sendMessage() throws Exception
+    public void sendSingleMessage() throws Exception
     {
+        
         // connect to local (docker) activemq
         final XAConnectionFactory xacf = new ActiveMQXAConnectionFactory("tcp://localhost:61616?jms.useAsyncSend=false");
         final AtomikosConnectionFactoryBean cf = new AtomikosConnectionFactoryBean();
