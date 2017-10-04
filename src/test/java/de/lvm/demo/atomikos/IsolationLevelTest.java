@@ -49,10 +49,15 @@ public class IsolationLevelTest
         String uuid = UUID.randomUUID().toString();
 
         utm.init();
+
         utm.begin();
+
+
 
         logger.info("open Connection ...");
         Connection conn = open();
+
+        conn.setTransactionIsolation(8);
 
         logger.info("conn {}", conn);
         try (PreparedStatement ps = conn.prepareStatement("insert into TEST.daten (id, name, count) VALUES (?,?,?)"))
@@ -68,7 +73,7 @@ public class IsolationLevelTest
         conn.close();
 
         utm.commit();
-        //utm.close();
+       // utm.close();
 
         return true;
     }

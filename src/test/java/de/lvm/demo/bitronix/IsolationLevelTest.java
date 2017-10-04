@@ -48,7 +48,7 @@ public class IsolationLevelTest
 
     protected boolean doIt(BitronixTransactionManager btm) throws RollbackException, HeuristicMixedException, SQLException, SecurityException, NotSupportedException, HeuristicRollbackException, SystemException, IllegalStateException
     {
-
+        btm = new BitronixTransactionManager();
         String uuid = UUID.randomUUID().toString();
 
         btm.begin();
@@ -70,7 +70,7 @@ public class IsolationLevelTest
         conn.close();
 
         btm.commit();
-        //btm.shutdown();
+        btm.shutdown();
 
         return true;
     }

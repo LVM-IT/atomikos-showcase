@@ -1,6 +1,10 @@
 package de.lvm.demo;
 
 import bitronix.tm.resource.jdbc.PoolingDataSource;
+import bitronix.tm.resource.jms.PoolingConnectionFactory;
+import org.apache.activemq.ActiveMQXAConnectionFactory;
+
+import javax.jms.XAConnectionFactory;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -89,6 +93,19 @@ public class BitronixTools {
 
         return poolingDataSource;
 
+    }
+
+
+    public static PoolingConnectionFactory buildBitronixActiveMQConnectionFactoryBean() {
+        final PoolingConnectionFactory cf = new PoolingConnectionFactory();
+        cf.getDriverProperties().setProperty("brokerURL", "tcp://localhost:61616?jms.useAsyncSend=false");
+        cf.setClassName("org.apache.activemq.ActiveMQXAConnectionFactory");
+        cf.setUniqueName(UUID.randomUUID().toString());
+        cf.setMinPoolSize(1);
+        cf.setMaxPoolSize(5);
+        cf.setAllowLocalTransactions(true);
+
+        return cf;
     }
 
 }

@@ -55,6 +55,12 @@
             <artifactId>transactions-api</artifactId>
             <version>${atomikos.version}</version>
         </dependency>
+        <!-- jms -->
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jms</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
 
         <!-- logging -->
         <dependency>

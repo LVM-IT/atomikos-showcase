@@ -2,9 +2,12 @@ package de.lvm.demo;
 
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.atomikos.jms.AtomikosConnectionFactoryBean;
 import com.ibm.db2.jcc.DB2XADataSource;
+import org.apache.activemq.ActiveMQXAConnectionFactory;
 import org.postgresql.xa.PGXADataSource;
 
+import javax.jms.XAConnectionFactory;
 import java.util.UUID;
 
 public class AtomikosTools
@@ -110,6 +113,16 @@ public class AtomikosTools
         dsBean.setTestQuery("select 1 from sysibm.sysdummy1");
         return dsBean;
 
+    }
+
+    public static AtomikosConnectionFactoryBean buildAtomikosActiveMQConnectionFactoryBean() {
+        final XAConnectionFactory xacf = new ActiveMQXAConnectionFactory("tcp://localhost:61616?jms.useAsyncSend=false");
+        final AtomikosConnectionFactoryBean cf = new AtomikosConnectionFactoryBean();
+        cf.setUniqueResourceName(UUID.randomUUID().toString());
+        cf.setXaConnectionFactory(xacf);
+        cf.setMinPoolSize(1);
+        cf.setMaxPoolSize(5);
+        return cf;
     }
 
 }
