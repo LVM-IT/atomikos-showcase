@@ -6,6 +6,7 @@ import org.postgresql.xa.PGXADataSource;
 
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +29,6 @@ public class BitronixTools {
         properties.setProperty("databaseName", "test");
         properties.setProperty("serverName", "localhost");
         properties.setProperty("portNumber", "5499");
-        properties.setProperty("driverType", "4");
         poolingDataSource.setDriverProperties(properties);
         return poolingDataSource;
     }
@@ -36,6 +36,7 @@ public class BitronixTools {
     public static PoolingDataSource buildBitronixPGDataSourceBeanWithTestQuery() {
 
         PoolingDataSource poolingDataSource = buildBitronixPGDataSourceBeanWithoutTestQuery();
+        poolingDataSource.setUniqueName("postgresTQ");
         poolingDataSource.setTestQuery("select 1");
 
         return poolingDataSource;
@@ -45,7 +46,7 @@ public class BitronixTools {
     public static PoolingDataSource buildBitronixDB2DataSourceBeanWithoutTestQuery() {
         PoolingDataSource poolingDataSource = new PoolingDataSource();
         poolingDataSource.setClassName("com.ibm.db2.jcc.DB2XADataSource");
-        poolingDataSource.setUniqueName("db2");
+        poolingDataSource.setUniqueName(UUID.randomUUID().toString());
         poolingDataSource.setMinPoolSize(0);
         poolingDataSource.setMaxPoolSize(5);
         poolingDataSource.setAllowLocalTransactions(true);
@@ -73,7 +74,7 @@ public class BitronixTools {
     public static PoolingDataSource buildBitronixDB2HostDataSourceBeanWithoutTestQuery() {
         PoolingDataSource poolingDataSource = new PoolingDataSource();
         poolingDataSource.setClassName("com.ibm.db2.jcc.DB2XADataSource");
-        poolingDataSource.setUniqueName("db2");
+        poolingDataSource.setUniqueName(UUID.randomUUID().toString());
         poolingDataSource.setMinPoolSize(0);
         poolingDataSource.setMaxPoolSize(5);
         poolingDataSource.setAllowLocalTransactions(true);

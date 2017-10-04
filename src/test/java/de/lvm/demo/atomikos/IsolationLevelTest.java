@@ -72,7 +72,7 @@ public class IsolationLevelTest
         conn.close();
 
         utm.commit();
-        utm.close();
+        //utm.close();
 
         return true;
     }
