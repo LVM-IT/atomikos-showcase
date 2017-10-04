@@ -6,7 +6,6 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.UUID;
 import javax.sql.DataSource;
 
 import de.lvm.demo.AtomikosTools;
@@ -14,8 +13,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * Connections taken from the pool keep auto-commit setting as returned to pool

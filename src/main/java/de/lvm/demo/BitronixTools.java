@@ -1,19 +1,9 @@
 package de.lvm.demo;
 
 import bitronix.tm.resource.jdbc.PoolingDataSource;
-import com.ibm.db2.jcc.DB2XADataSource;
-import org.postgresql.xa.PGXADataSource;
-
-import java.sql.SQLException;
 import java.util.Properties;
 import java.util.UUID;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Klaus Schulte (m500288)
- * Date: 8/31/17
- * Time: 1:32 PM
- */
 public class BitronixTools {
 
     public static PoolingDataSource buildBitronixPGDataSourceBeanWithoutTestQuery() {
@@ -71,6 +61,9 @@ public class BitronixTools {
     }
 
 
+    /**
+     * Note: Works only in integration test environment
+     */
     public static PoolingDataSource buildBitronixDB2HostDataSourceBeanWithoutTestQuery() {
         PoolingDataSource poolingDataSource = new PoolingDataSource();
         poolingDataSource.setClassName("com.ibm.db2.jcc.DB2XADataSource");

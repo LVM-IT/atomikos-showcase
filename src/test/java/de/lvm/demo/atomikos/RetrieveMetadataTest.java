@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Example when retrieving metadata from a connection
- * This Test *Only* fails with DB/2 on System Z!!!
+ * This Test *only* fails with DB/2 on System Z!!!
  */
 public class RetrieveMetadataTest
 {
@@ -70,7 +70,7 @@ public class RetrieveMetadataTest
         if (ds == null)
         {
             //transacted without test query
-            ds = AtomikosTools.buildAtomikosDB2HostDataSourceBeanWithoutTestQuery();
+            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
             //transacted with test query
 //            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
         }

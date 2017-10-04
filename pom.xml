@@ -79,6 +79,12 @@
             <version>1.2.3</version>
         </dependency>
 
+        <!-- jms / activemq -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.15.0</version>
+        </dependency>
         
         <!-- jdbc drivers -->
         <dependency>
