@@ -37,27 +37,26 @@ public class IsolationLevelTest
     {
         UserTransactionManager utm = new UserTransactionManager();
 
+        utm.init();
+
+        utm.begin();
+
         //works
         doIt(utm);
 
         //breaks when setting isolation level (again) 
         assertThat(doIt(utm), is(true));
+
+        utm.commit();
+        utm.close();
     }
 
     protected boolean doIt(UserTransactionManager utm) throws RollbackException, HeuristicMixedException, SQLException, SecurityException, NotSupportedException, HeuristicRollbackException, SystemException, IllegalStateException
     {
         String uuid = UUID.randomUUID().toString();
 
-        utm.init();
-
-        utm.begin();
-
-
-
         logger.info("open Connection ...");
         Connection conn = open();
-
-        conn.setTransactionIsolation(8);
 
         logger.info("conn {}", conn);
         try (PreparedStatement ps = conn.prepareStatement("insert into TEST.daten (id, name, count) VALUES (?,?,?)"))
@@ -72,7 +71,7 @@ public class IsolationLevelTest
         logger.info("close Connection ...");
         conn.close();
 
-        utm.commit();
+        //utm.commit();
        // utm.close();
 
         return true;
