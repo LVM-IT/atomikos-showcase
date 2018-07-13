@@ -32,7 +32,7 @@ public class PoolAutocommitFlagsTest {
         
         //check code
         logger.info("open Connection ...");
-        Connection conn = open(true);
+        Connection conn = open(false);
         conn.setAutoCommit(false);
 
         logger.info("conn {}", conn);

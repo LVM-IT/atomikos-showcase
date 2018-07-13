@@ -28,6 +28,7 @@ public class AtomikosTools
         dsBean.setMaxPoolSize(5);
         dsBean.setUniqueResourceName(UUID.randomUUID().toString());
         dsBean.setBorrowConnectionTimeout(60);
+    //    dsBean.setUseDriverBasedConnectionValidation(true);
         dsBean.setReapTimeout(0);
         dsBean.setSupportsTmJoin(false);
         return dsBean;
@@ -60,6 +61,7 @@ public class AtomikosTools
 
         dsBean.setMinPoolSize(0);
         dsBean.setMaxPoolSize(5);
+       // dsBean.setUseDriverBasedConnectionValidation(true);
         dsBean.setUniqueResourceName(UUID.randomUUID().toString());
         dsBean.setBorrowConnectionTimeout(20);
         dsBean.setReapTimeout(0);

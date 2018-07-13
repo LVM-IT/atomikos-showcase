@@ -17,6 +17,7 @@ public class BitronixTools {
         poolingDataSource.setMinPoolSize(0);
         poolingDataSource.setMaxPoolSize(5);
         poolingDataSource.setAllowLocalTransactions(true);
+        poolingDataSource.setUseTmJoin(true);
         Properties properties = new Properties();
         properties.setProperty("user", "test");
         properties.setProperty("password", "test");

@@ -39,7 +39,16 @@ public class RetrieveMetadataTest
 
         //XX
         logger.info("get metadata ...");
+
         DatabaseMetaData metaData = conn.getMetaData();
+        //conn.rollback();
+
+        ResultSet procs = metaData.getProcedures(null, "SCHEMA", "PROC");
+        procs.close();
+
+
+        conn.prepareCall("call SCHEMA.PROC");
+
         ResultSet catalogs = metaData.getCatalogs();
         catalogs.close();
 
@@ -70,9 +79,9 @@ public class RetrieveMetadataTest
         if (ds == null)
         {
             //transacted without test query
-            ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithoutTestQuery();
+           ds = AtomikosTools.buildAtomikosDB2HostDataSourceBeanWithoutTestQuery();
             //transacted with test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+         //   ds = AtomikosTools.buildAtomikosDB2DataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();

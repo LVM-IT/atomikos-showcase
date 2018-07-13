@@ -38,6 +38,14 @@ public class RetrieveMetadataTest
         //XX
         logger.info("get metadata ...");
         DatabaseMetaData metaData = conn.getMetaData();
+
+        ResultSet procs = metaData.getProcedures(null, "SCHEMA", "PROC");
+        procs.close();
+
+
+        conn.prepareCall("call SCHEMA.PROC");
+
+
         ResultSet catalogs = metaData.getCatalogs();
         catalogs.close();
 
@@ -69,7 +77,7 @@ public class RetrieveMetadataTest
             //transacted without test query
             ds = BitronixTools.buildBitronixDB2HostDataSourceBeanWithoutTestQuery();
             //transacted with test query
-//            ds = AtomikosTools.buildAtomikosDataSourceBeanWithTestQuery();
+            //ds = BitronixTools.buildBitronixDB2HostDataSourceBeanWithTestQuery();
         }
 
         return ds.getConnection();
